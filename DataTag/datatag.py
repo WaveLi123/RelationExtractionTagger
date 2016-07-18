@@ -209,9 +209,9 @@ if __name__ == '__main__':
                             strWord = ''
                             for word in wordlist:
                                 strWord += "*" + word.encode('utf-8')
-                            print "-----------------------------------------------------------------"\
-                                  +"Possible Entities: " + strWord + "\n" \
-                                  + "(标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName +")\n" + \
+                            print "-----------------------------------------------------------------\n"\
+                                  + "Possible Entities: " + strWord + "\n" \
+                                  + "标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName + "\n"  + \
                                   "-----------------------------------------------------------------"
                             sentenceTagNumber += 1  #for all document
                             while 1:
