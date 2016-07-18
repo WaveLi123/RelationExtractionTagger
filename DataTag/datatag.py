@@ -212,8 +212,9 @@ if __name__ == '__main__':
                                   + "(标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName +")"
                             sentenceTagNumber += 1  #for all document
                             while 1:
-                                value = raw_input("请标记出本句实体关系(A，Atype：B，Btype->Realtion，RealtionType)(q:quit)：\n")
-                                lables = ['，', '：', '->']
+                                value = raw_input("请标记出本句实体关系(A,Atype:B,Btype->Realtion,RealtionType)(q:quit)：\n\n")
+                                # lables = ['，', '：', '->']
+                                lables = [',', ':', '->']
                                 if value == "q":
                                     break
                                 relationTemp = value.split(lables[2])[1]
