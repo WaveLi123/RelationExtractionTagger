@@ -12,13 +12,13 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-# import platform
-# osclear = 'clear'
-# oscode = 'utf-8'
-# if platform.system() == 'Windows':
-#     import WinLinux
-#     osclear = 'CLS'
-#     oscode = 'gbk'
+import platform
+osclear = 'clear'
+oscode = 'utf-8'
+if platform.system() == 'Windows':
+    import WinLinux
+    osclear = 'CLS'
+    oscode = 'gbk'
 
 lable = '。'
 
@@ -204,28 +204,30 @@ if __name__ == '__main__':
                         if len(wordlist) > 2:
                             i = os.system('cls')
                             showInfo()
-                            print '/'.join(jieba.cut(sentence.strip()))
+                            print ''.join(jieba.cut(sentence.strip()))
                             strWord = ''
                             for word in wordlist:
                                 strWord += "*" + word.encode('utf-8')
-                            print "(Possible Entities: " + strWord + ",标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName +")"
+                            print "(Possible Entities: " + strWord + ")\n" \
+                                  + "(标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName +")"
                             sentenceTagNumber += 1  #for all document
                             while 1:
-                                value = raw_input("请标记出本句实体关系(A,Atype:B,Btype->Realtion)(q:quit)：\n")
+                                value = raw_input("请标记出本句实体关系(A，Atype：B，Btype->Realtion，RealtionType)(q:quit)：\n")
+                                lables = ['，', '：', '->']
                                 if value == "q":
                                     break
-                                relationTemp = value.split("->")[1]
-                                relation = relationTemp.split(",")[0]
-                                relationType = relationTemp.split(",")[1]
+                                relationTemp = value.split(lables[2])[1]
+                                relation = relationTemp.split(lables[0])[0]
+                                relationType = relationTemp.split(lables[0])[1]
 
-                                entitiysTemp = value.split("->")[0]
-                                entitiyBefTemp = entitiysTemp.split(":")[0]
-                                entityBef = entitiyBefTemp.split(",")[0]
-                                entityBefType = entitiyBefTemp.split(",")[1]
+                                entitiysTemp = value.split(lables[2])[0]
+                                entitiyBefTemp = entitiysTemp.split(lables[1])[0]
+                                entityBef = entitiyBefTemp.split(lables[0])[0]
+                                entityBefType = entitiyBefTemp.split(lables[0])[1]
 
-                                entitiyAftTemp = entitiysTemp.split(":")[1]
-                                entityAft = entitiyAftTemp.split(",")[0]
-                                entityAftType = entitiyAftTemp.split(",")[1]
+                                entitiyAftTemp = entitiysTemp.split(lables[1])[1]
+                                entityAft = entitiyAftTemp.split(lables[0])[0]
+                                entityAftType = entitiyAftTemp.split(lables[0])[1]
 
                                 pubdate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
