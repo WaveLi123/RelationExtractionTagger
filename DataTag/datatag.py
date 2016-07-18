@@ -208,11 +208,11 @@ if __name__ == '__main__':
                             strWord = ''
                             for word in wordlist:
                                 strWord += "*" + word.encode('utf-8')
-                            print "(Possible Entities: " + strWord + ")\n" \
-                                  + "(标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName +")"
+                            print "Possible Entities: " + strWord + "\n" \
+                                  + "(标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName +")\n" + " ---->"
                             sentenceTagNumber += 1  #for all document
                             while 1:
-                                value = raw_input("请标记出本句实体关系(A,Atype:B,Btype->Realtion,RealtionType)(q:quit)：\n\n")
+                                value = raw_input("请标记出本句实体关系(A,Atype:B,Btype->Realtion,RealtionType)(q:quit)：\n")
                                 # lables = ['，', '：', '->']
                                 lables = [',', ':', '->']
                                 if value == "q":
