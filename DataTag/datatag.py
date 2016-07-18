@@ -8,10 +8,19 @@ import xlrd
 import jieba
 import time
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-lable = ['。','；']
+# import platform
+# osclear = 'clear'
+# oscode = 'utf-8'
+# if platform.system() == 'Windows':
+#     import WinLinux
+#     osclear = 'CLS'
+#     oscode = 'gbk'
+
+lable = '。'
 
 # # 打开词典文件 for txt
 # def getDictionaryContent(dictionaryPath):
@@ -120,12 +129,13 @@ def addEntitiesRelations(contents,filePath,documentContents,documentName):
     doc.writexml(f)
     f.close()
 
-
-if __name__ == '__main__':
+def showInfo():
     print "***********************EntitiesRelationTag***********************"
     print "*Entities:股票类,A;股票类,A;股票类,A;股票类,A;股票类,A;股票类,A;*"
     print "*Relation:收益比,1;收益比,2;收益比,3;收益比,4;收益比,5;收益比,6;*"
     print "*****************************************************************"
+
+if __name__ == '__main__':
     # dictionaryPath = raw_input("请输入领域词库：")
     # documentPath = raw_input("请输入待标记的文档目录：")
 
@@ -153,45 +163,46 @@ if __name__ == '__main__':
             if not line:
                 break
             if len(line) > 1:
-                for sentenceTemp in line.split(lable[1]):
-                    for sentence in sentenceTemp.split(lable[0]):
-                        wordlist = checkSentenceEntity(sentence, dictionary)
-                        if len(wordlist) > 2:
-                            print '\n'+'/'.join(jieba.cut(sentence.strip()))
-                            strWord = ''
-                            for word in wordlist:
-                                strWord += "*" + word.encode('utf-8')
-                            print "(Possible Entities: " + strWord + ")"
-                            sentenceTagNumber += 1  #for all document
-            #                 while 1:
-            #                         value = raw_input("请标记出实体关系(A,Atype:B,Btype->Realtion)(q:quit)：\n")
-            #                         if value == "q":
-            #                             break
-            #                         relationTemp = value.split("->")[1]
-            #                         relation = relationTemp.split(",")[0]
-            #                         relationType = relationTemp.split(",")[1]
-            #
-            #                         entitiysTemp = value.split("->")[0]
-            #                         entitiyBefTemp = entitiysTemp.split(":")[0]
-            #                         entityBef = entitiyBefTemp.split(",")[0]
-            #                         entityBefType = entitiyBefTemp.split(",")[1]
-            #
-            #                         entitiyAftTemp = entitiysTemp.split(":")[1]
-            #                         entityAft = entitiyAftTemp.split(",")[0]
-            #                         entityAftType = entitiyAftTemp.split(",")[1]
-            #
-            #                         pubdate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-            #
-            #                         number += 1
-            #                         entitiesRelation = {'id': str(number)
-            #                             , 'entityBef': str(entityBef), 'entityBefType': str(entityBefType)
-            #                             , 'entityAft': str(entityAft), 'entityAftType': str(entityAftType)
-            #                             , 'relation': str(relation), 'relationType': str(relationType)
-            #                             , 'sentence': str(sentence), 'pubdate': str(pubdate)
-            #                             };
-            #                         entitiesRelationList.append(entitiesRelation)
-            # addEntitiesRelations(entitiesRelationList, fileName.replace(".txt",".xml"), str(documentContent), str(fileName))
-            #
-            # documentFo.close()
+                for sentence in line.split(lable):
+                    wordlist = checkSentenceEntity(sentence, dictionary)
+                    if len(wordlist) > 2:
+                        i = os.system('cls')
+                        showInfo()
+                        print '/'.join(jieba.cut(sentence.strip()))
+                        strWord = ''
+                        for word in wordlist:
+                            strWord += "*" + word.encode('utf-8')
+                        print "(Possible Entities: " + strWord + ")"
+                        sentenceTagNumber += 1  #for all document
+                        while 1:
+                                value = raw_input("请标记出实体关系(A,Atype:B,Btype->Realtion)(q:quit)：\n")
+                                if value == "q":
+                                    break
+                                relationTemp = value.split("->")[1]
+                                relation = relationTemp.split(",")[0]
+                                relationType = relationTemp.split(",")[1]
+
+                                entitiysTemp = value.split("->")[0]
+                                entitiyBefTemp = entitiysTemp.split(":")[0]
+                                entityBef = entitiyBefTemp.split(",")[0]
+                                entityBefType = entitiyBefTemp.split(",")[1]
+
+                                entitiyAftTemp = entitiysTemp.split(":")[1]
+                                entityAft = entitiyAftTemp.split(",")[0]
+                                entityAftType = entitiyAftTemp.split(",")[1]
+
+                                pubdate = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
+                                number += 1
+                                entitiesRelation = {'id': str(number)
+                                    , 'entityBef': str(entityBef), 'entityBefType': str(entityBefType)
+                                    , 'entityAft': str(entityAft), 'entityAftType': str(entityAftType)
+                                    , 'relation': str(relation), 'relationType': str(relationType)
+                                    , 'sentence': str(sentence), 'pubdate': str(pubdate)
+                                    };
+                                entitiesRelationList.append(entitiesRelation)
+            addEntitiesRelations(entitiesRelationList, fileName.replace(".txt",".xml"), str(documentContent), str(fileName))
+
+        documentFo.close()
 
     print sentenceTagNumber
