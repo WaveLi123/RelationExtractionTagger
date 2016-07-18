@@ -12,6 +12,12 @@ __author__ = 'waveli'
 # jieba.add_word("中国美")
 # print('/'.join(jieba.cut("中国美日本差")))
 
-from datatag import addEntitiesRelations
+# from datatag import addEntitiesRelations
+#
+# addEntitiesRelations()
 
-addEntitiesRelations()
+# print str(float(3)/float(2)*100) + "%"
+
+fo = file(r'E:/financeXML\\090924687496_1158.txt', "a+")
+fo.write(str('E:/JinTong/finance\\090924687496_1158.txt') + "\n")
+fo.close()

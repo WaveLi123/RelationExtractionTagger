@@ -125,9 +125,43 @@ def addEntitiesRelations(contents,filePath,documentContents,documentName):
     operateDate.appendChild(doc.createTextNode(str(operateDates)))
     entitiesRelationList.appendChild(operateDate)
 
-    f = file(filePath,"a")
+    f = file(filePath,"w")
     doc.writexml(f)
     f.close()
+
+def writeTagFile(filePath):
+    fo = open("TaggedFiles.txt", "a+")
+    fo.write(filePath + "\n")
+    # 关闭打开的文件
+    fo.close()
+
+def testTagFile(filePath):
+    # 打开一个文件
+    fo = open("TaggedFiles.txt", "a+")
+    taggedFiles = []
+    while 1:
+        line = fo.readline()
+        if not line:
+            break
+        taggedFiles.append(line)
+    fo.close()
+    for linePath in taggedFiles:
+        if linePath == (filePath+"\n"):
+            return False
+    return True
+
+def checkTagFile(files):
+    # 打开一个文件
+    fo = open("TaggedFiles.txt", "r")
+    taggedFiles = []
+    while 1:
+        line = fo.readline()
+        if not line:
+            break
+        taggedFiles.append(line)
+    # 关闭打开的文件
+    fo.close()
+    return str(len(taggedFiles) + 1) + "/" + str(len(files))
 
 def showInfo():
     print "***********************EntitiesRelationTag***********************"
@@ -139,8 +173,8 @@ if __name__ == '__main__':
     # dictionaryPath = raw_input("请输入领域词库：")
     # documentPath = raw_input("请输入待标记的文档目录：")
 
-    dictionaryPath = "E:/JinTong/dict.xlsx"
-    documentPath = "E:/JinTong/finance"
+    dictionaryPath = "E:\\JinTong\\dict.xlsx"
+    documentPath = "E:\\JinTong\\finance"
 
     dictionary = getDictionaryContent(dictionaryPath)   #词典内容
     dictionary = list(set(dictionary))                  #词典去重
@@ -151,30 +185,32 @@ if __name__ == '__main__':
     #文档目录文件内容获取
     document = []
     sentenceTagNumber = 0
-    for documentPath in listFileNames(documentPath):
-        documentFo = open(documentPath, "r")
-        fileName = documentFo.name
-        entitiesRelationList = []
-        number = 0              #for this document
-        documentContent = ''
-        while 1:
-            line = documentFo.readline()
-            documentContent += line
-            if not line:
-                break
-            if len(line) > 1:
-                for sentence in line.split(lable):
-                    wordlist = checkSentenceEntity(sentence, dictionary)
-                    if len(wordlist) > 2:
-                        i = os.system('cls')
-                        showInfo()
-                        print '/'.join(jieba.cut(sentence.strip()))
-                        strWord = ''
-                        for word in wordlist:
-                            strWord += "*" + word.encode('utf-8')
-                        print "(Possible Entities: " + strWord + ")"
-                        sentenceTagNumber += 1  #for all document
-                        while 1:
+    documentPaths = listFileNames(documentPath)
+    for documentPath in documentPaths:
+        if testTagFile(documentPath):
+            documentFo = open(documentPath, "r")
+            fileName = documentFo.name
+            entitiesRelationList = []
+            number = 0              #for this document
+            documentContent = ''
+            while 1:
+                line = documentFo.readline()
+                documentContent += line
+                if not line:
+                    break
+                if len(line) > 1:
+                    for sentence in line.split(lable):
+                        wordlist = checkSentenceEntity(sentence, dictionary)
+                        if len(wordlist) > 2:
+                            i = os.system('cls')
+                            showInfo()
+                            print '/'.join(jieba.cut(sentence.strip()))
+                            strWord = ''
+                            for word in wordlist:
+                                strWord += "*" + word.encode('utf-8')
+                            print "(Possible Entities: " + strWord + ",标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName +")"
+                            sentenceTagNumber += 1  #for all document
+                            while 1:
                                 value = raw_input("请标记出实体关系(A,Atype:B,Btype->Realtion)(q:quit)：\n")
                                 if value == "q":
                                     break
@@ -201,8 +237,9 @@ if __name__ == '__main__':
                                     , 'sentence': str(sentence), 'pubdate': str(pubdate)
                                     };
                                 entitiesRelationList.append(entitiesRelation)
-            addEntitiesRelations(entitiesRelationList, fileName.replace(".txt",".xml"), str(documentContent), str(fileName))
-
-        documentFo.close()
+            if len(entitiesRelationList) > 0:
+                addEntitiesRelations(entitiesRelationList, fileName.replace(".txt",".xml").replace("finance","financeXML"), str(documentContent), str(fileName))
+            documentFo.close()
+            writeTagFile(documentPath)
 
     print sentenceTagNumber
