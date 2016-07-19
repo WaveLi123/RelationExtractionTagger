@@ -17,8 +17,8 @@ osclear = 'clear'
 oscode = 'utf-8'
 if platform.system() == 'Windows':
     import WinLinux
-    osclear = 'CLS'
-    oscode = 'gbk'
+    # osclear = 'CLS'
+    # oscode = 'gbk'
 
 lable = '。'
 
@@ -125,8 +125,9 @@ def addEntitiesRelations(contents,filePath,documentContents,documentName):
     operateDate.appendChild(doc.createTextNode(str(operateDates)))
     entitiesRelationList.appendChild(operateDate)
 
-    f = file(filePath,"w")
-    doc.writexml(f)
+    f = file(filePath, "w")
+    doc.writexml(f, encoding='utf-8')
+    # doc.writexml(f)
     f.close()
 
 def writeTagFile(filePath):
@@ -209,13 +210,18 @@ if __name__ == '__main__':
                             strWord = ''
                             for word in wordlist:
                                 strWord += "*" + word.encode('utf-8')
-                            print "-----------------------------------------------------------------\n"\
-                                  + "Possible Entities: " + strWord + "\n" \
-                                  + "标注文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName + "\n"  + \
-                                  "-----------------------------------------------------------------"
                             sentenceTagNumber += 1  #for all document
+                            print "-----------------------------------------------------------------\n"\
+                              + "Possible Entities: " + strWord + "\n" \
+                              + "进度：" + str((float(sentenceTagNumber)/float(3099))*100)[0:4] + "%," + "文件比：" + checkTagFile(documentPaths) + ",文件路径："+ fileName + "\n"  \
+                              + "-----------------------------------------------------------------"
                             while 1:
-                                value = raw_input("请标记出本句实体关系(A,Atype:B,Btype->Realtion,RealtionType)(q:quit)：\n")
+                                try:
+                                    valueTemp = raw_input("请标记出本句实体关系(A,Atype:B,Btype->Realtion,RealtionType)(q:quit)：\n")
+                                    value = valueTemp.decode("GB2312").encode("utf-8")
+                                except IOError:
+                                    print IOError
+                                # value = valueTemp.encode("utf-8")
                                 # lables = ['，', '：', '->']
                                 lables = [',', ':', '->']
                                 if value == "q":
@@ -247,5 +253,7 @@ if __name__ == '__main__':
                 addEntitiesRelations(entitiesRelationList, fileName.replace(".txt",".xml").replace("finance","financeXML"), str(documentContent), str(fileName))
             documentFo.close()
             writeTagFile(documentPath)
+        else:
+            sentenceTagNumber += len(open(documentPath, 'r').readlines())  #for all document
 
     print sentenceTagNumber
