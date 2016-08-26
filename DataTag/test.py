@@ -1,23 +1,19 @@
 # -*- coding: UTF-8 -*-
 __author__ = 'waveli'
 
-# from datatag import checkSentenceEntity
-#
-# dictionary = ['word_ch','中国','日本']
-# sentence = '中国是个有着悠久历史的国家，则没有'
-#
-# print checkSentenceEntity(sentence,dictionary)
+from Tkinter import *           # 导入 Tkinter 库
+root = Tk()                     # 创建窗口对象的背景色
+                                # 创建两个列表
+li     = ['C','python','php','html','SQL','java']
+movie  = ['CSS','jQuery','Bootstrap']
+listb  = Listbox(root)          #  创建两个列表组件
+listb2 = Listbox(root)
+for item in li:                 # 第一个小部件插入数据
+    listb.insert(0,item)
 
-# import jieba
-# jieba.add_word("中国美")
-# print('/'.join(jieba.cut("中国美日本差")))
+for item in movie:              # 第二个小部件插入数据
+    listb2.insert(0,item)
 
-# from datatag import addEntitiesRelations
-#
-# addEntitiesRelations()
-
-# print str(float(3)/float(2)*100) + "%"
-
-fo = file(r'E:/financeXML\\090924687496_1158.txt', "a+")
-fo.write(str('E:/JinTong/finance\\090924687496_1158.txt') + "\n")
-fo.close()
+listb.pack()                    # 将小部件放置到主窗口中
+listb2.pack()
+root.mainloop()                 # 进入消息循环
